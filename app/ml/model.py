@@ -1,11 +1,17 @@
+from enum import Enum
 import joblib
 import numpy as np
-from typing import List, Tuple
+from typing import Dict, List, Tuple
 import os
 
 
+class ModelOptions(str, Enum):
+    iris = "iris"
+    diabetes = "diabetes"
+
+
 class MLModel:
-    def __init__(self, dataset_name):
+    def __init__(self, dataset_name: str):
         self.dataset_name = dataset_name
         self.model_type = None
         self.model = None
@@ -96,3 +102,26 @@ class MLModel:
             "n_features": self.metadata["n_features"],
             "model_type": type(self.model).__name__,
         }
+
+
+class ModelRegistry:
+    def __init__(self):
+        self.models: Dict[str, MLModel] = {}
+
+    def register_model(self, name: ModelOptions):
+        model = MLModel(name.value)
+        self.models[name] = model
+
+    def get_model(self, name: ModelOptions) -> MLModel:
+        if name not in self.models:
+            raise ValueError(f"Model {name} not found")
+        return self.models[name]
+
+    def list_models(self) -> list:
+        return list(self.models.keys())
+
+
+# Global registry
+model_registry = ModelRegistry()
+model_registry.register_model(ModelOptions.iris)
+model_registry.register_model(ModelOptions.diabetes)

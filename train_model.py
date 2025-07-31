@@ -80,8 +80,6 @@ def train_diabetes_model():
     print("Diabetes model saved successfully!")
 
 
-
-
 if __name__ == "__main__":
     os.makedirs("app/ml/saved_models", exist_ok=True)
     train_iris_model()

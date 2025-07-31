@@ -15,12 +15,16 @@ class MLModel:
     def load_model(self):
         """Load the trained model and metadata"""
         try:
-            model_path = os.path.join(os.path.dirname(__file__), f"{self.dataset_name}_model.pkl")
-            metadata_path = os.path.join(os.path.dirname(__file__), f"{self.dataset_name}_metadata.pkl")
+            model_path = os.path.join(
+                os.path.dirname(__file__), f"{self.dataset_name}_model.pkl"
+            )
+            metadata_path = os.path.join(
+                os.path.dirname(__file__), f"{self.dataset_name}_metadata.pkl"
+            )
 
             self.model = joblib.load(model_path)
             self.metadata = joblib.load(metadata_path)
-            self.model_type = self.metadata['model_type']
+            self.model_type = self.metadata["model_type"]
             self.is_loaded = True
             print("Model loaded successfully!")
 
@@ -43,7 +47,7 @@ class MLModel:
             confidence = float(max(probabilities))
 
             # Get species name
-            prediction_name = self.metadata['target_names'][prediction_id]
+            prediction_name = self.metadata["target_names"][prediction_id]
 
             return prediction_name, int(prediction_id), confidence
         elif self.model_type == "regression":
@@ -54,7 +58,9 @@ class MLModel:
         else:
             raise ValueError("Invalid model type")
 
-    def predict_batch(self, samples: List[List[float]]) -> List[Tuple[str, int, float]] | List[float]:
+    def predict_batch(
+        self, samples: List[List[float]]
+    ) -> List[Tuple[str, int, float]] | List[float]:
         """Make batch predictions"""
         if not self.is_loaded:
             raise ValueError("Model not loaded")
@@ -69,7 +75,7 @@ class MLModel:
 
             results = []
             for i, (pred_id, probs) in enumerate(zip(predictions, probabilities)):
-                prediction_name = self.metadata['target_names'][pred_id]
+                prediction_name = self.metadata["target_names"][pred_id]
                 confidence = float(max(probs))
                 results.append((prediction_name, int(pred_id), confidence))
             return results
@@ -85,8 +91,8 @@ class MLModel:
             return {"error": "Model not loaded"}
 
         return {
-            "feature_names": self.metadata['feature_names'],
-            "target_names": self.metadata['target_names'],
-            "n_features": self.metadata['n_features'],
-            "model_type": type(self.model).__name__
+            "feature_names": self.metadata["feature_names"],
+            "target_names": self.metadata["target_names"],
+            "n_features": self.metadata["n_features"],
+            "model_type": type(self.model).__name__,
         }

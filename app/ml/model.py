@@ -1,7 +1,7 @@
 from enum import Enum
 import joblib
 import numpy as np
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Optional
 import os
 
 
@@ -22,10 +22,10 @@ class MLModel:
         """Load the trained model and metadata"""
         try:
             model_path = os.path.join(
-                os.path.dirname(__file__), f"{self.dataset_name}_model.pkl"
+                os.path.dirname(__file__), f"saved_models/{self.dataset_name}_model.pkl"
             )
             metadata_path = os.path.join(
-                os.path.dirname(__file__), f"{self.dataset_name}_metadata.pkl"
+                os.path.dirname(__file__), f"saved_models/{self.dataset_name}_metadata.pkl"
             )
 
             self.model = joblib.load(model_path)
@@ -38,7 +38,9 @@ class MLModel:
             print(f"Error loading model: {e}")
             self.is_loaded = False
 
-    def predict(self, features: List[float]) -> Tuple[str, int, float] | float:
+    def predict(
+        self, features: List[float]
+    ) -> Tuple[str, Optional[int], Optional[float]]:
         """Make a single prediction"""
         if not self.is_loaded:
             raise ValueError("Model not loaded")
@@ -60,13 +62,13 @@ class MLModel:
             prediction = self.model.predict(X)[0]
             ## todo: justify a confidence measurement and implement
 
-            return prediction
+            return prediction, None, None
         else:
             raise ValueError("Invalid model type")
 
     def predict_batch(
         self, samples: List[List[float]]
-    ) -> List[Tuple[str, int, float]] | List[float]:
+    ) -> List[Tuple[str | float, Optional[int], Optional[float]]]:
         """Make batch predictions"""
         if not self.is_loaded:
             raise ValueError("Model not loaded")
@@ -87,7 +89,7 @@ class MLModel:
             return results
         elif self.model_type == "regression":
             predictions = self.model.predict(X)
-            return predictions
+            return [(p, None, None) for p in predictions]
         else:
             raise ValueError("Invalid model type")
 
@@ -100,7 +102,8 @@ class MLModel:
             "feature_names": self.metadata["feature_names"],
             "target_names": self.metadata["target_names"],
             "n_features": self.metadata["n_features"],
-            "model_type": type(self.model).__name__,
+            "model_type": self.model_type,
+            "dataset": self.dataset_name,
         }
 
 

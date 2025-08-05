@@ -28,7 +28,7 @@ def train_iris_model():
     print(classification_report(y_test, predictions, target_names=iris.target_names))
 
     # Save the model
-    joblib.dump(model, "app/ml/saved_models/iris_model.pkl")
+    joblib.dump(model, "../app/ml/saved_models/iris_model.pkl")
 
     # Save feature names and target names for later use
     model_metadata = {
@@ -38,7 +38,7 @@ def train_iris_model():
         "target_names": iris.target_names.tolist(),
         "n_features": len(iris.feature_names),
     }
-    joblib.dump(model_metadata, "app/ml/saved_models/iris_metadata.pkl")
+    joblib.dump(model_metadata, "../app/ml/saved_models/iris_metadata.pkl")
 
     print("Iris model saved successfully!")
 
@@ -66,7 +66,7 @@ def train_diabetes_model():
     print(f"Mean Residuals: {np.mean(y_diff)}")
     print(f"Std Residuals: {np.std(y_diff)}")
 
-    joblib.dump(model, "app/ml/saved_models/diabetes_model.pkl")
+    joblib.dump(model, "../app/ml/saved_models/diabetes_model.pkl")
 
     model_metadata = {
         "model_type": "regression",
@@ -75,12 +75,12 @@ def train_diabetes_model():
         "target_names": "disease_progression",
         "n_features": len(diabetes.feature_names),
     }
-    joblib.dump(model_metadata, "app/ml/saved_models/diabetes_metadata.pkl")
+    joblib.dump(model_metadata, "../app/ml/saved_models/diabetes_metadata.pkl")
 
     print("Diabetes model saved successfully!")
 
 
 if __name__ == "__main__":
-    os.makedirs("app/ml/saved_models", exist_ok=True)
+    os.makedirs("../app/ml/saved_models", exist_ok=True)
     train_iris_model()
     train_diabetes_model()

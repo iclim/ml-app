@@ -32,7 +32,7 @@ def train_iris_model():
 
     # Save feature names and target names for later use
     model_metadata = {
-        "type": "classification",
+        "model_type": "classification",
         "dataset_name": "iris",
         "feature_names": iris.feature_names,
         "target_names": iris.target_names.tolist(),
@@ -69,7 +69,7 @@ def train_diabetes_model():
     joblib.dump(model, "app/ml/saved_models/diabetes_model.pkl")
 
     model_metadata = {
-        "type": "regression",
+        "model_type": "regression",
         "dataset_name": "diabetes",
         "feature_names": diabetes.feature_names,
         "target_names": "disease_progression",

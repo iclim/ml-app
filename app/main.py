@@ -12,8 +12,8 @@ app = FastAPI(
 # Load the model on startup
 @app.on_event("startup")
 async def startup_event():
-    model_registry.get_models(ModelOptions.iris).load_model()
-    model_registry.get_models(ModelOptions.diabetes).load_model()
+    model_registry.get_model(ModelOptions.iris).load_model()
+    model_registry.get_model(ModelOptions.diabetes).load_model()
 
 
 # Include the API routes
